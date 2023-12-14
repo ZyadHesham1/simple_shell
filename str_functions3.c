@@ -39,22 +39,22 @@ char *_strncpy(char *dest, char *src, int n)
  */
 char *_strncat(char *dest, char *src, int n)
 {
-	int i, j;
-	char *s = dest;
+	int x, y;
+	char *p = dest;
 
-	i = 0;
-	j = 0;
-	while (dest[i] != '\0')
-		i++;
-	while (src[j] != '\0' && j < n)
+	x = 0;
+	y = 0;
+	while (dest[x] != '\0')
+		x++;
+	while (src[y] != '\0' && y < n)
 	{
-		dest[i] = src[j];
-		i++;
-		j++;
+		dest[x] = src[y];
+		x++;
+		y++;
 	}
-	if (j < n)
-		dest[i] = '\0';
-	return (s);
+	if (y < n)
+		dest[x] = '\0';
+	return (p);
 }
 
 /**

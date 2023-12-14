@@ -10,36 +10,38 @@
  */
 ssize_t input_buf(info_t *info, char **buf, size_t *len)
 {
-	ssize_t x = 0;
-	size_t y = 0;
+	ssize_t r = 0;
+	size_t len_p = 0;
 
-	if (!*len)
+	if (!*len) /* if nothing left in the buffer, fill it */
 	{
+		/*bfree((void **)info->cmd_buf);*/
 		free(*buf);
 		*buf = NULL;
 		signal(SIGINT, sigintHandler);
 #if USE_GETLINE
-		x = getline(buf, &y, stdin);
+		r = getline(buf, &len_p, stdin);
 #else
-		x = _getline(info, buf, &y);
+		r = _getline(info, buf, &len_p);
 #endif
-		if (x > 0)
+		if (r > 0)
 		{
-			if ((*buf)[x - 1] == '\n')
+			if ((*buf)[r - 1] == '\n')
 			{
-				(*buf)[x - 1] = '\0';
-				x--;
+				(*buf)[r - 1] = '\0'; /* remove trailing newline */
+				r--;
 			}
 			info->linecount_flag = 1;
 			remove_comments(*buf);
 			build_history_list(info, *buf, info->histcount++);
+			/* if (_strchr(*buf, ';')) is this a command chain? */
 			{
-				*len = x;
+				*len = r;
 				info->cmd_buf = buf;
 			}
 		}
 	}
-	return (x);
+	return (r);
 }
 
 /**
@@ -51,31 +53,31 @@ ssize_t input_buf(info_t *info, char **buf, size_t *len)
 ssize_t get_input(info_t *info)
 {
 	static char *buf; /* the ';' command chain buffer */
-	static size_t x, y, len;
-	ssize_t s = 0;
+	static size_t i, j, len;
+	ssize_t r = 0;
 	char **buf_p = &(info->arg), *p;
 
 	_putchar(BUF_FLUSH);
-	x = input_buf(info, &buf, &len);
-	if (s == -1) /* EOF */
+	r = input_buf(info, &buf, &len);
+	if (r == -1) /* EOF */
 		return (-1);
 	if (len)	/* we have commands left in the chain buffer */
 	{
-		y = x; /* init new iterator to current buf position */
-		p = buf + x; /* get pointer for return */
+		j = i; /* init new iterator to current buf position */
+		p = buf + i; /* get pointer for return */
 
-		check_chain(info, buf, &y, x, len);
-		while (y < len) /* iterate to semicolon or end */
+		check_chain(info, buf, &j, i, len);
+		while (j < len) /* iterate to semicolon or end */
 		{
-			if (is_chain(info, buf, &y))
+			if (is_chain(info, buf, &j))
 				break;
-			y++;
+			j++;
 		}
 
-		x = y + 1; /* increment past nulled ';'' */
-		if (x >= len) /* reached end of buffer? */
+		i = j + 1; /* increment past nulled ';'' */
+		if (i >= len) /* reached end of buffer? */
 		{
-			x = len = 0; /* reset position and length */
+			i = len = 0; /* reset position and length */
 			info->cmd_buf_type = CMD_NORM;
 		}
 
@@ -84,7 +86,7 @@ ssize_t get_input(info_t *info)
 	}
 
 	*buf_p = buf; /* else not a chain, pass back buffer from _getline() */
-	return (s); /* return length of buffer from _getline() */
+	return (r); /* return length of buffer from _getline() */
 }
 
 /**
@@ -93,18 +95,18 @@ ssize_t get_input(info_t *info)
  * @buf: buffer
  * @i: size
  *
- * Return: s
+ * Return: r
  */
 ssize_t read_buf(info_t *info, char *buf, size_t *i)
 {
-	ssize_t s = 0;
+	ssize_t r = 0;
 
 	if (*i)
 		return (0);
-	s = read(info->readfd, buf, READ_BUF_SIZE);
-	if (s >= 0)
-		*i = s;
-	return (s);
+	r = read(info->readfd, buf, READ_BUF_SIZE);
+	if (r >= 0)
+		*i = r;
+	return (r);
 }
 
 /**

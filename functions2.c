@@ -8,24 +8,24 @@
  */
 int _erratoi(char *s)
 {
-	int i = 0;
-	unsigned long int result = 0;
+	int x = 0;
+	unsigned long int r = 0;
 
 	if (*s == '+')
-		s++;  /* TODO: why does this make main return 255? */
-	for (i = 0;  s[i] != '\0'; i++)
+		s++;
+	for (x = 0;  s[x] != '\0'; x++)
 	{
-		if (s[i] >= '0' && s[i] <= '9')
+		if (s[x] >= '0' && s[x] <= '9')
 		{
-			result *= 10;
-			result += (s[i] - '0');
-			if (result > INT_MAX)
+			r *= 10;
+			r += (s[x] - '0');
+			if (r > INT_MAX)
 				return (-1);
 		}
 		else
 			return (-1);
 	}
-	return (result);
+	return (r);
 }
 
 /**
@@ -56,7 +56,7 @@ void print_error(info_t *info, char *estr)
 int print_d(int input, int fd)
 {
 	int (*__putchar)(char) = _putchar;
-	int i, count = 0;
+	int x, counter = 0;
 	unsigned int _abs_, current;
 
 	if (fd == STDERR_FILENO)
@@ -65,24 +65,24 @@ int print_d(int input, int fd)
 	{
 		_abs_ = -input;
 		__putchar('-');
-		count++;
+		counter++;
 	}
 	else
 		_abs_ = input;
 	current = _abs_;
-	for (i = 1000000000; i > 1; i /= 10)
+	for (x = 1000000000; x > 1; x /= 10)
 	{
-		if (_abs_ / i)
+		if (_abs_ / x)
 		{
-			__putchar('0' + current / i);
-			count++;
+			__putchar('0' + current / x);
+			counter++;
 		}
-		current %= i;
+		current %= x;
 	}
 	__putchar('0' + current);
-	count++;
+	counter++;
 
-	return (count);
+	return (counter);
 }
 
 /**
@@ -129,12 +129,12 @@ char *convert_number(long int num, int base, int flags)
  */
 void remove_comments(char *buf)
 {
-	int i;
+	int x;
 
-	for (i = 0; buf[i] != '\0'; i++)
-		if (buf[i] == '#' && (!i || buf[i - 1] == ' '))
+	for (x = 0; buf[x] != '\0'; x++)
+		if (buf[x] == '#' && (!x || buf[x - 1] == ' '))
 		{
-			buf[i] = '\0';
+			buf[x] = '\0';
 			break;
 		}
 }
