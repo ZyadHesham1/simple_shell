@@ -71,7 +71,7 @@ int print_alias(list_t *node)
 	{
 		x = _strchr(node->str, '=');
 		for (y = node->str; y <= x; y++)
-			_putchar(*a);
+			_putchar(*y);
 		_putchar('\'');
 		_puts(x + 1);
 		_puts("'\n");
@@ -106,7 +106,7 @@ int _myalias(info_t *info)
 	{
 		b = _strchr(info->argv[a], '=');
 		if (b)
-			set_alias(info, info->argv[i]);
+			set_alias(info, info->argv[a]);
 		else
 			print_alias(node_starts_with(info->alias, info->argv[a], '='));
 	}

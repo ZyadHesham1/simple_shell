@@ -35,38 +35,39 @@ int _myexit(info_t *info)
  *          constant function prototype.
  *  Return: Always 0
  */
+
 int _mycd(info_t *info)
 {
-	char *p, *dirctory, buffer[1024];
-	int chdirctory;
+	char *s, *dir, buffer[1024];
+	int chdir_ret;
 
-	p = getcwd(buffer, 1024);
-	if (!p)
+	s = getcwd(buffer, 1024);
+	if (!s)
 		_puts("TODO: >>getcwd failure emsg here<<\n");
 	if (!info->argv[1])
 	{
 		dir = _getenv(info, "HOME=");
 		if (!dir)
-			chdirctory = /* TODO: what should this be? */
-				chdirctory((dir = _getenv(info, "PWD=")) ? dir : "/");
+			chdir_ret =
+				chdir((dir = _getenv(info, "PWD=")) ? dir : "/");
 		else
-			chdirctory = chdir(dir);
+			chdir_ret = chdir(dir);
 	}
 	else if (_strcmp(info->argv[1], "-") == 0)
 	{
 		if (!_getenv(info, "OLDPWD="))
 		{
-			_puts(p);
+			_puts(s);
 			_putchar('\n');
 			return (1);
 		}
 		_puts(_getenv(info, "OLDPWD=")), _putchar('\n');
-		chdirctory = /* TODO: what should this be? */
+		chdir_ret =
 			chdir((dir = _getenv(info, "OLDPWD=")) ? dir : "/");
 	}
 	else
-		chdirctory = chdir(info->argv[1]);
-	if (chdirctory == -1)
+		chdir_ret = chdir(info->argv[1]);
+	if (chdir_ret == -1)
 	{
 		print_error(info, "can't cd to ");
 		_eputs(info->argv[1]), _eputchar('\n');

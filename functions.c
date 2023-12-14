@@ -47,7 +47,7 @@ int _isalpha(int c)
 
 int _atoi(char *s)
 {
-	int x sign = 1, flag = 0, output;
+	int x, sign = 1, flag = 0, output;
 	unsigned int res = 0;
 
 	for (x = 0;  s[x] != '\0' && flag != 2; x++)
