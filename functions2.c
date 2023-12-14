@@ -8,24 +8,24 @@
  */
 int _erratoi(char *s)
 {
-	int x = 0;
-	unsigned long int res = 0;
+	int i = 0;
+	unsigned long int result = 0;
 
 	if (*s == '+')
-		s++;
-	for (x = 0;  s[x] != '\0'; x++)
+		s++;  /* TODO: why does this make main return 255? */
+	for (i = 0;  s[i] != '\0'; i++)
 	{
-		if (s[x] >= '0' && s[x] <= '9')
+		if (s[i] >= '0' && s[i] <= '9')
 		{
-			res *= 10;
-			res += (s[x] - '0');
-			if (res > INT_MAX)
+			result *= 10;
+			result += (s[i] - '0');
+			if (result > INT_MAX)
 				return (-1);
 		}
 		else
 			return (-1);
 	}
-	return (res);
+	return (result);
 }
 
 /**
@@ -98,7 +98,7 @@ char *convert_number(long int num, int base, int flags)
 	static char *array;
 	static char buffer[50];
 	char sign = 0;
-	char *p;
+	char *ptr;
 	unsigned long n = num;
 
 	if (!(flags & CONVERT_UNSIGNED) && num < 0)
@@ -108,17 +108,17 @@ char *convert_number(long int num, int base, int flags)
 
 	}
 	array = flags & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
-	p = &buffer[49];
-	*p = '\0';
+	ptr = &buffer[49];
+	*ptr = '\0';
 
 	do	{
-		*--p = array[n % base];
+		*--ptr = array[n % base];
 		n /= base;
 	} while (n != 0);
 
 	if (sign)
-		*--p = sign;
-	return (p);
+		*--ptr = sign;
+	return (ptr);
 }
 
 /**
@@ -129,12 +129,12 @@ char *convert_number(long int num, int base, int flags)
  */
 void remove_comments(char *buf)
 {
-	int x;
+	int i;
 
-	for (x = 0; buf[x] != '\0'; x++)
-		if (buf[x] == '#' && (!x || buf[x - 1] == ' '))
+	for (i = 0; buf[i] != '\0'; i++)
+		if (buf[i] == '#' && (!i || buf[i - 1] == ' '))
 		{
-			buf[x] = '\0';
+			buf[i] = '\0';
 			break;
 		}
 }

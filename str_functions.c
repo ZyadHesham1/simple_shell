@@ -8,14 +8,14 @@
  */
 int _strlen(char *s)
 {
-	int counter = 0;
+	int i = 0;
 
 	if (!s)
 		return (0);
 
 	while (*s++)
-		counter++;
-	return (counter);
+		i++;
+	return (i);
 }
 
 /**
@@ -56,23 +56,20 @@ char *starts_with(const char *haystack, const char *needle)
 }
 
 /**
- * _strcat - appends src to the dest string
- * @dest: string to append by src
- * @src: string to append to dest
+ * _strcat - concatenates two strings
+ * @dest: the destination buffer
+ * @src: the source buffer
  *
- * Return: address of dest
+ * Return: pointer to destination buffer
  */
 char *_strcat(char *dest, char *src)
 {
-	int i, j;
+	char *ret = dest;
 
-	i = j = 0;
-	while (*(dest + i))
-		i++;
-	while ((*(dest + i) = *(src + j)))
-	{
-		i++;
-		j++;
-	}
-	return (dest);
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
+	*dest = *src;
+	return (ret);
 }
